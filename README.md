@@ -1,7 +1,7 @@
 load-usb-sound
 ==============
 
-script to load the firmware for supported usb audio cards on linux
+Script to load the firmware for supported usb audio cards on linux, such as M-AUDIO devices. See [the webpage for the firmware loader](http://usb-midi-fw.sourceforge.net/).
 
 Requirements
 ------------
