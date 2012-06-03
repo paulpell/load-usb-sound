@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [ $UID -eq 0 ]; then
+	echo "madfuload segfaults when called by root, use as normal user; sudo is used"
+	exit
+fi
+
+
+FIRMWARE=/home/paul/Downloads/madfuload-1.2/ma004103.bin
+#FIRMWARE=/usr/local/lib/ma004103.bin
+
+device_line=$(lsusb | grep MobilePre)
+DEVICE=$(echo "$device_line" | perl -ne 'print $1."/".$2 if /Bus (\d+) Device (\d+)/')
+
+echo "madfuload: loading firmware ($FIRMWARE) for device /proc/bus/usb/$DEVICE..."
+sudo -k # force password..
+sudo madfuload -D /proc/bus/usb/"$DEVICE" -f "$FIRMWARE" --nowait
+
+if [ ! $? -eq 139 ]; then
+	echo ERROR
+	exit
+fi
+
+echo "asoundconf: setting default card MobilePre"
+asoundconf set-default-card MobilePre
